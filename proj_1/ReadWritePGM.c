@@ -22,6 +22,8 @@ int ydim;
 int maxraw;
 unsigned char *image;
 
+const float t = 1.0f;
+
 void ReadPGM(FILE*);
 void WritePGM(FILE*);
 
