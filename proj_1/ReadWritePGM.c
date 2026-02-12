@@ -12,6 +12,7 @@ when you use this function.
 #include <math.h>
 #include <malloc.h>  
 #include <memory.h>
+#include "config.h"
 
 #define max(x, y) ((x>y) ? (x):(y))
 #define min(x, y) ((x<y) ? (x):(y))
@@ -22,11 +23,8 @@ int ydim;
 int maxraw;
 unsigned char *image;
 
-const float t = 2.0f;
-
 void ReadPGM(FILE*);
 void WritePGM(FILE*);
-
 
 int main(int argc, char **argv)
 {
@@ -49,8 +47,8 @@ int main(int argc, char **argv)
   }
   ReadPGM(fp);
 
-  int mdim = (int)floor(xdim * t);
-  int ndim = (int)floor(ydim * t);
+  int mdim = (int)floor(xdim * SCALE);
+  int ndim = (int)floor(ydim * SCALE);
   unsigned char *outimage = (unsigned char*)malloc(sizeof(unsigned char)*mdim*ndim);
   
   printf("The transformed size is %d by %d pixels\n", mdim, ndim);
