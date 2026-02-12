@@ -22,7 +22,7 @@ int ydim;
 int maxraw;
 unsigned char *image;
 
-const float t = 1.0f;
+const float t = 2.0f;
 
 void ReadPGM(FILE*);
 void WritePGM(FILE*);
@@ -48,7 +48,12 @@ int main(int argc, char **argv)
     exit(0);
   }
   ReadPGM(fp);
- 
+
+  int mdim = (int)floor(xdim * t);
+  int ndim = (int)floor(ydim * t);
+
+  printf("The transformed size is %d by %d pixels\n", mdim, ndim);
+  printf("The size of the unmodified image array is %lu\n", sizeof(image)); 
   // your application here 
   // As an example, let's just make an inversion of the input image.
   for (j=0; j<ydim; j++)
