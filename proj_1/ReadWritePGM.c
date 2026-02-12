@@ -51,9 +51,12 @@ int main(int argc, char **argv)
 
   int mdim = (int)floor(xdim * t);
   int ndim = (int)floor(ydim * t);
-
+  unsigned char *outimage = (unsigned char*)malloc(sizeof(unsigned char)*mdim*ndim);
+  
   printf("The transformed size is %d by %d pixels\n", mdim, ndim);
-  printf("The size of the unmodified image array is %lu\n", sizeof(image)); 
+  printf("The size of the unmodified image array is %lu\n", sizeof(unsigned char)*xdim*ydim); 
+  printf("The size of the modified image array is %lu\n", sizeof(unsigned char)*mdim*ndim); 
+
   // your application here 
   // As an example, let's just make an inversion of the input image.
   for (j=0; j<ydim; j++)
