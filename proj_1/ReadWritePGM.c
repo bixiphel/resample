@@ -54,7 +54,12 @@ int main(int argc, char **argv)
   // Calculate dimensions of the new image and allocate space in memory
   int m = (int) (xdim * SCALE);    // The scaled x-axis
   int n = (int) (ydim * SCALE);    // The scaled y-axis
-  unsigned char *new_image = malloc(m * y); 
+  unsigned char *new_image = malloc(m * y);    // Instantiated scaled image buffer 
+
+
+  // Determine where scaled pixels map back to the source image's pixels
+  float src_x = m / SCALE;
+  float src_y = n / SCALE;
 
   for (j=0; j<ydim; j++)
     for (i=0; i<xdim; i++) {
