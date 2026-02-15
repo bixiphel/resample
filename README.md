@@ -10,6 +10,7 @@ General Notes
 
 Project Specific Notes
 - Code was written and compiled running Ubuntu 24.04 through WSL on Windows 11
+    - Some commits were pushed through a SSH connection. Such commits are registered to user "sydney"
 - Compilation was done using the GNU Compiler Collection (gcc) version 13.3.0
 - Bash instructions are included below, machine-specific commands may be different
 - Two examplar output images are attached below. The corresponding scaling factors are **0.40** and **2.23**, and labeled in `~/proj_1/sample images` as `output1.pgm` and `output2.pgm` respectively. PNG versions of each file are also included in the same folder.
