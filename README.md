@@ -18,4 +18,5 @@ Project Specific Notes
 All source code was written and compiled on Ubuntu 24.04, system-specific compilation and execution instructions may vary; Linux-based instructions are provided below.
  
 Compile instruction: gcc ReadWritePGM.c -o resample
+
 Execution instruction: ./resample <input PGM> <output PGM> <scale>
