@@ -12,11 +12,9 @@ when you use this function.
 #include <math.h>
 #include <malloc.h>  
 #include <memory.h>
-#include "config.h"
 
 #define max(x, y) ((x>y) ? (x):(y))
 #define min(x, y) ((x<y) ? (x):(y))
-
 
 int xdim;
 int ydim;
@@ -26,19 +24,21 @@ unsigned char *image;
 void ReadPGM(FILE*);
 void WritePGM(FILE*);
 
+float SCALE;
 
 int main(int argc, char **argv)
 {
-  int i, j;
   FILE *fp;
 
-  if (argc != 3){
-    printf("Usage: MyProgram <input_ppm> <output_ppm> \n");
+  if (argc != 4){
+    printf("Usage: MyProgram <input_ppm> <output_ppm> <scale> \n");
     printf("       <input_ppm>: PGM file \n");
     printf("       <output_ppm>: PGM file \n");
+    printf("       <scale>: Scaling factor \n");
     exit(0);              
   }
 
+  SCALE = atof(argv[3]);
   printf("Scaling factor: %f\n", SCALE);
 
   /* begin reading PGM.... */
@@ -48,16 +48,16 @@ int main(int argc, char **argv)
     exit(0);
   }
   ReadPGM(fp);
- 
+
   // your application here 
-  
+
   // Checks if the scaling factor is valid in case scaling factor is too small or negative
   if(SCALE <= 0.0F) {
     printf("Scaling factor must be a nonzero positive floating value.\n");
     exit(1);
   }
 
-  // Calculate dimensions of the new image and allocate space in memory. Also ensures a minimum size just in case.
+  // Calculate dimensions of the new image and allocate space in memory. Also ensures a minimum size instead of seg faulting 
   int mdim = max(1, (int) (xdim * SCALE + 0.5f));    // The scaled x-axis
   int ndim = max(1, (int) (ydim * SCALE + 0.5f));    // The scaled y-axis
   unsigned char *new_image = (unsigned char*) malloc(mdim * ndim);    // Instantiated scaled image buffer 
@@ -111,8 +111,6 @@ int main(int argc, char **argv)
 
   return (1);
 }
-
-
 
 void ReadPGM(FILE* fp)
 {
