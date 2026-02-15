@@ -50,12 +50,19 @@ int main(int argc, char **argv)
   ReadPGM(fp);
  
   // your application here 
-  // As an example, let's just make an inversion of the input image.
+  
+  // Calculate dimensions of the new image and allocate space in memory
+  int m = (int) (xdim * SCALE);    // The scaled x-axis
+  int n = (int) (ydim * SCALE);    // The scaled y-axis
+  unsigned char *new_image = malloc(m * y); 
+
   for (j=0; j<ydim; j++)
     for (i=0; i<xdim; i++) {
       image[j*xdim+i] = 255 - image[j*xdim+i];
     }
   
+
+
   /* Begin writing PGM.... */
   printf("Begin writing PGM.... \n");
   if ((fp=fopen(argv[2], "wb")) == NULL){
