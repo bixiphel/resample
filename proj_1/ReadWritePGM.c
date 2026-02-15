@@ -51,27 +51,53 @@ int main(int argc, char **argv)
  
   // your application here 
   
-  // Calculate dimensions of the new image and allocate space in memory
-  int m = (int) (xdim * SCALE);    // The scaled x-axis
-  int n = (int) (ydim * SCALE);    // The scaled y-axis
-  unsigned char *new_image = malloc(m * y);    // Instantiated scaled image buffer 
+  // Checks if the scaling factor is valid in case scaling factor is too small or negative
+  if(SCALE <= 0.0F) {
+    printf("Scaling factor must be a nonzero positive floating value.\n");
+    exit(1);
+  }
 
-  // Determine where scaled pixels map back to the source image's pixels
-  float src_x = m / SCALE;
-  float src_y = n / SCALE;
+  // Calculate dimensions of the new image and allocate space in memory. Also ensures a minimum size just in case.
+  int mdim = max(1, (int) (xdim * SCALE + 0.5f));    // The scaled x-axis
+  int ndim = max(1, (int) (ydim * SCALE + 0.5f));    // The scaled y-axis
+  unsigned char *new_image = (unsigned char*) malloc(mdim * ndim);    // Instantiated scaled image buffer 
 
-  // Find neighboring pixels. 
-  int x0 = (int) src_x;
-  int x1 = (int) min(x0 + 1, xdim - 1);
-  int y0 = (int) src_y;
-  int y1 = (int) min(y0 + 1, ydim - 1);
+  // Loop over every pixel in the output image and calculate the new intensities based on the input image
+  for(int n = 0; n < ndim; n++) {
+    for(int m = 0; m < mdim; m++) {
+      // Determine where scaled pixels map back to the source image's pixels
+      float src_x = m / SCALE;
+      float src_y = n / SCALE;
 
-  for (j=0; j<ydim; j++)
-    for (i=0; i<xdim; i++) {
-      image[j*xdim+i] = 255 - image[j*xdim+i];
-    }
+      // Find neighboring pixels' locations 
+      int x0 = (int) src_x;
+      int x1 = (int) min(x0 + 1, xdim - 1);
+      int y0 = (int) src_y;
+      int y1 = (int) min(y0 + 1, ydim - 1);
+
+      // Define weights for the horizontal and vertical directions
+      float w_x = src_x - x0;
+      float w_y = src_y - y0;
   
+      // Find the intensities of the neighboring pixels
+      unsigned char p00 = image[y0*xdim + x0];
+      unsigned char p10 = image[y0*xdim + x1];
+      unsigned char p01 = image[y1*xdim + x0];
+      unsigned char p11 = image[y1*xdim + x1];
 
+      // Calculate the intensity of the pixel in the scaled image using bilinear interpolation  
+      float value = p00 * (1 - w_x) * (1 - w_y) + p10 * (w_x)*(1 - w_y) + p01 * (1 - w_x) * (w_y) + p11 * (w_x) * (w_y);
+      
+      // Write to the output image's buffer
+      new_image[n * mdim + m] = (unsigned char)(value + 0.5F); 
+    }
+  }
+
+  // Replace original image buffer with output image's buffer (to avoid changing other functions below)
+  free(image);
+  image = new_image;
+  xdim = mdim;
+  ydim = ndim; 
 
   /* Begin writing PGM.... */
   printf("Begin writing PGM.... \n");
