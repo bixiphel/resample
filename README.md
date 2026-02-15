@@ -19,5 +19,5 @@ Project Specific Notes
 
 ---
 
-- Compile instruction: gcc ReadWritePGM.c -o resample
-- Execution instruction: ./resample [input PGM] [output PGM] [scale]
+- Compile instruction: `gcc ReadWritePGM.c -o resample`
+- Execution instruction: `./resample <input PGM> <output PGM> <scale>`
