@@ -56,10 +56,15 @@ int main(int argc, char **argv)
   int n = (int) (ydim * SCALE);    // The scaled y-axis
   unsigned char *new_image = malloc(m * y);    // Instantiated scaled image buffer 
 
-
   // Determine where scaled pixels map back to the source image's pixels
   float src_x = m / SCALE;
   float src_y = n / SCALE;
+
+  // Find neighboring pixels. 
+  int x0 = (int) src_x;
+  int x1 = (int) min(x0 + 1, xdim - 1);
+  int y0 = (int) src_y;
+  int y1 = (int) min(y0 + 1, ydim - 1);
 
   for (j=0; j<ydim; j++)
     for (i=0; i<xdim; i++) {
