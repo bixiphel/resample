@@ -7,7 +7,9 @@ General Notes
 - Implementation includes no calls to third-party libraries or built-in functions other than libraries already specified in the source code
 
 Project Specific Notes
-- Two examplar output images are attached below. The corresponding scaling factors are 0.40 and 2.23, and labeled in `~/proj_1/sample images` as `output1.pgm` and `output2.pgm` respectively.  
+- Two examplar output images are attached below. The corresponding scaling factors are 0.40 and 2.23, and labeled in `~/proj_1/sample images` as `output1.pgm` and `output2.pgm` respectively. 
+[!proj_1/"sample images"/output1.pgm]
+[!proj_1/"sample images"/output2.pgm]
 
 All source code was written and compiled on Ubuntu 24.04, system-specific compilation and execution instructions may vary; Linux-based instructions are provided below.
  
