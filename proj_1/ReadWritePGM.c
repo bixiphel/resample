@@ -12,11 +12,9 @@ when you use this function.
 #include <math.h>
 #include <malloc.h>  
 #include <memory.h>
-#include "config.h"
 
 #define max(x, y) ((x>y) ? (x):(y))
 #define min(x, y) ((x<y) ? (x):(y))
-
 
 int xdim;
 int ydim;
@@ -26,19 +24,21 @@ unsigned char *image;
 void ReadPGM(FILE*);
 void WritePGM(FILE*);
 
+float SCALE;
 
 int main(int argc, char **argv)
 {
-  int i, j;
   FILE *fp;
 
-  if (argc != 3){
-    printf("Usage: MyProgram <input_ppm> <output_ppm> \n");
+  if (argc != 4){
+    printf("Usage: MyProgram <input_ppm> <output_ppm> <scale> \n");
     printf("       <input_ppm>: PGM file \n");
     printf("       <output_ppm>: PGM file \n");
+    printf("       <scale>: Scaling factor \n");
     exit(0);              
   }
 
+  SCALE = atof(argv[3]);
   printf("Scaling factor: %f\n", SCALE);
 
   /* begin reading PGM.... */
@@ -48,14 +48,57 @@ int main(int argc, char **argv)
     exit(0);
   }
   ReadPGM(fp);
- 
+
   // your application here 
-  // As an example, let's just make an inversion of the input image.
-  for (j=0; j<ydim; j++)
-    for (i=0; i<xdim; i++) {
-      image[j*xdim+i] = 255 - image[j*xdim+i];
-    }
+
+  // Checks if the scaling factor is valid in case scaling factor is too small or negative
+  if(SCALE <= 0.0F) {
+    printf("Scaling factor must be a nonzero positive floating value.\n");
+    exit(1);
+  }
+
+  // Calculate dimensions of the new image and allocate space in memory. Also ensures a minimum size instead of seg faulting 
+  int mdim = max(1, (int) (xdim * SCALE + 0.5f));    // The scaled x-axis
+  int ndim = max(1, (int) (ydim * SCALE + 0.5f));    // The scaled y-axis
+  unsigned char *new_image = (unsigned char*) malloc(mdim * ndim);    // Instantiated scaled image buffer 
+
+  // Loop over every pixel in the output image and calculate the new intensities based on the input image
+  for(int n = 0; n < ndim; n++) {
+    for(int m = 0; m < mdim; m++) {
+      // Determine where scaled pixels map back to the source image's pixels
+      float src_x = m / SCALE;
+      float src_y = n / SCALE;
+
+      // Find neighboring pixels' locations 
+      int x0 = (int) src_x;
+      int x1 = (int) min(x0 + 1, xdim - 1);
+      int y0 = (int) src_y;
+      int y1 = (int) min(y0 + 1, ydim - 1);
+
+      // Define weights for the horizontal and vertical directions
+      float w_x = src_x - x0;
+      float w_y = src_y - y0;
   
+      // Find the intensities of the neighboring pixels
+      unsigned char p00 = image[y0*xdim + x0];
+      unsigned char p10 = image[y0*xdim + x1];
+      unsigned char p01 = image[y1*xdim + x0];
+      unsigned char p11 = image[y1*xdim + x1];
+
+      // Calculate the intensity of the pixel in the scaled image using bilinear interpolation  
+      float value = p00 * (1 - w_x) * (1 - w_y) + p10 * (w_x)*(1 - w_y) + p01 * (1 - w_x) * (w_y) + p11 * (w_x) * (w_y);
+      
+      // Write to the output image's buffer
+      new_image[n * mdim + m] = (unsigned char)(value + 0.5F); 
+    }
+  }
+
+  // Replace original image buffer with output image's buffer (to avoid changing other functions below)
+  free(image);
+  image = new_image;
+  xdim = mdim;
+  ydim = ndim; 
+
   /* Begin writing PGM.... */
   printf("Begin writing PGM.... \n");
   if ((fp=fopen(argv[2], "wb")) == NULL){
@@ -68,8 +111,6 @@ int main(int argc, char **argv)
 
   return (1);
 }
-
-
 
 void ReadPGM(FILE* fp)
 {
