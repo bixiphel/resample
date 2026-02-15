@@ -8,8 +8,9 @@ General Notes
 
 Project Specific Notes
 - Two examplar output images are attached below. The corresponding scaling factors are 0.40 and 2.23, and labeled in `~/proj_1/sample images` as `output1.pgm` and `output2.pgm` respectively. 
-!(proj_1/"sample images"/output1.pgm)
-!(proj_1/"sample images"/output2.pgm)
+<img width="151" height="156" alt="output1" src="https://github.com/user-attachments/assets/63490a74-6865-4a0b-a53e-ffad8f977c24" />
+<img width="843" height="867" alt="output2" src="https://github.com/user-attachments/assets/1a99f0fa-b978-45c5-b07d-c37c6fa11577" />
+
 
 All source code was written and compiled on Ubuntu 24.04, system-specific compilation and execution instructions may vary; Linux-based instructions are provided below.
  
