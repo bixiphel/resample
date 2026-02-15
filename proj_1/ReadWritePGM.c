@@ -12,6 +12,7 @@ when you use this function.
 #include <math.h>
 #include <malloc.h>  
 #include <memory.h>
+#include "config.h"
 
 #define max(x, y) ((x>y) ? (x):(y))
 #define min(x, y) ((x<y) ? (x):(y))
@@ -38,6 +39,7 @@ int main(int argc, char **argv)
     exit(0);              
   }
 
+  printf("Scaling factor: %f\n", SCALE);
 
   /* begin reading PGM.... */
   printf("begin reading PGM.... \n");
