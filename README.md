@@ -1,4 +1,5 @@
 Version control and repository available at https://github.com/bixiphel/resample
+
 Bilinear interpolation algorithm implementation was written in C using provided project files. Program takes in a greyscale PGM image and a floating-point type scaling factor and creates a greyscale PGM image that is scaled according to the scaling factor. 
 
 General Notes 
